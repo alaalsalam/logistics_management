@@ -11,7 +11,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/logistics_management/css/logistics_management.css"
-# app_include_js = "/assets/logistics_management/js/logistics_management.js"
+app_include_js = "/assets/logistics_management/js/employee_document.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/logistics_management/css/logistics_management.css"
@@ -133,6 +133,13 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
+scheduler_events = {
+    "daily": [
+
+        "logistics_management.expiry_notification.notify_queue"
+
+    ],
+}
 # scheduler_events = {
 # 	"all": [
 # 		"logistics_management.tasks.all"
