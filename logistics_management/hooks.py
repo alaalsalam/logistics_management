@@ -134,13 +134,21 @@ app_include_js = ["/assets/logistics_management/js/employee_document.js","/asset
 # ---------------
 
 scheduler_events = {
+
+    "cron": {
+        "0/10 * * * *": [
+            "logistics_management.api.essl_attendance_log"
+        ]
+    },
     "daily": [
 
         "logistics_management.expiry_notification.notify_queue",
         "logistics_management.api.update_expiry_for_employee"
 
+ 
     ],
 }
+
 # scheduler_events = {
 # 	"all": [
 # 		"logistics_management.tasks.all"

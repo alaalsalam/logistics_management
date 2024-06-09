@@ -43,48 +43,48 @@ def claculate_expiry(expiry_date):
         return "Error"
 
 @frappe.whitelist()
-def process_checkin():
-    data = [
-        {
-            "EmployeeCode": "KF1018",
-            "LogDate": "2024-06-04 9:43:34",
-            "SerialNumber": "CRJP232260403",
-            "PunchDirection": "IN",
-            "Temperature": 0.0,
-            "TemperatureState": "Not Measured"
-        },
-        {
-            "EmployeeCode": "KF1017",
-            "LogDate": "2024-06-04 10:00:34",
-            "SerialNumber": "CRJP232260403",
-            "PunchDirection": "IN",
-            "Temperature": 0.0,
-            "TemperatureState": "Not Measured"
-        },
-        {
-            "EmployeeCode": "KF1018",
-            "LogDate": "2024-06-04 12:43:34",
-            "SerialNumber": "CRJP232260403",
-            "PunchDirection": "OUT",
-            "Temperature": 0.0,
-            "TemperatureState": "Not Measured"
-        },
-        {
-            "EmployeeCode": "KF1017",
-            "LogDate": "2024-06-04 01:00:34",
-            "SerialNumber": "CRJP232260403",
-            "PunchDirection": "OUT",
-            "Temperature": 0.0,
-            "TemperatureState": "Not Measured"
-        },
+def process_checkin(Logdata):
+    # data = [
+    #     {
+    #         "EmployeeCode": "KF1018",
+    #         "LogDate": "2024-06-04 9:43:34",
+    #         "SerialNumber": "CRJP232260403",
+    #         "PunchDirection": "IN",
+    #         "Temperature": 0.0,
+    #         "TemperatureState": "Not Measured"
+    #     },
+    #     {
+    #         "EmployeeCode": "KF1017",
+    #         "LogDate": "2024-06-04 10:00:34",
+    #         "SerialNumber": "CRJP232260403",
+    #         "PunchDirection": "IN",
+    #         "Temperature": 0.0,
+    #         "TemperatureState": "Not Measured"
+    #     },
+    #     {
+    #         "EmployeeCode": "KF1018",
+    #         "LogDate": "2024-06-04 12:43:34",
+    #         "SerialNumber": "CRJP232260403",
+    #         "PunchDirection": "OUT",
+    #         "Temperature": 0.0,
+    #         "TemperatureState": "Not Measured"
+    #     },
+    #     {
+    #         "EmployeeCode": "KF1017",
+    #         "LogDate": "2024-06-04 01:00:34",
+    #         "SerialNumber": "CRJP232260403",
+    #         "PunchDirection": "OUT",
+    #         "Temperature": 0.0,
+    #         "TemperatureState": "Not Measured"
+    #     },
         
-    ]
+    # ]
 
-    for index,item in enumerate(data):
+    for index,item in enumerate(Logdata):
         employee_code = item['EmployeeCode']
         timestamp_str = item['LogDate']
         device_id = item['SerialNumber']
-        log_type = item['PunchDirection']
+        # log_type = item['PunchDirection']
         timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
         employee = frappe.db.get_value('Employee', {'attendance_device_id': employee_code}, 'name')
@@ -105,10 +105,10 @@ def process_checkin():
             check_in.employee = employee
             check_in.time = timestamp
             check_in.device_id = device_id
-            check_in.log_type = log_type
+            # check_in.log_type = log_type
             check_in.insert()
 
-        if index == len(data)-1:
+        if index == len(Logdata)-1:
             update_last_checkin_sync(shift)
 
 @frappe.whitelist()
@@ -127,7 +127,7 @@ def essl_attendance_log():
     headers = {}
 
     response = requests.request("GET", url=essl_url, headers=headers, data=payload)
-    process_checkin(response.json())
+    process_checkin(Logdata=response.json())
     return response.json()
 
 @frappe.whitelist()
