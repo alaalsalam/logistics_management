@@ -83,7 +83,7 @@ def send_email_notification(employee, email, days, days_left, document_type, att
             <p>If you have any questions or require assistance, please do not hesitate to contact our support team.</p>
             <p>Thank you for your attention to this matter.</p>
             <p>Best regards,</p>
-            <p><strong>Container Hub LLC</strong></p>
+            <p><strong>KAAF Logistics</strong></p>
         </div>
         <div class="footer">
             This is an automated message. Please do not reply directly to this email.
