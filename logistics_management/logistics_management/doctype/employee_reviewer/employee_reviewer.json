@@ -37,7 +37,8 @@
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Comment"
+   "label": "Comment",
+   "reqd": 1
   },
   {
    "default": "0",
@@ -50,7 +51,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-07-10 20:06:39.407207",
+ "modified": "2024-07-13 04:32:37.178649",
  "modified_by": "Administrator",
  "module": "Logistics Management",
  "name": "Employee Reviewer",
