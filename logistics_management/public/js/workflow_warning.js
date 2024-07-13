@@ -38,23 +38,25 @@ frappe.ui.form.on('Expense Claim', {
                     },
                     callback: function (r) {
 
-                        frappe.call({
-                            method: 'frappe.desk.form.utils.add_comment',
-                            args: {
-                                reference_doctype: frm.doctype,
-                                reference_name: frm.doc.name,
-                                content: reviewer.comment,
-                                comment_email: frappe.session.user,
-                                comment_by: frappe.session.user_fullname
+                        if (reviewer.comment) {
+
+                            frappe.call({
+                                method: 'frappe.desk.form.utils.add_comment',
+                                args: {
+                                    reference_doctype: frm.doctype,
+                                    reference_name: frm.doc.name,
+                                    content: reviewer.comment,
+                                    comment_email: frappe.session.user,
+                                    comment_by: frappe.session.user_fullname
+                                },
+                                callback: function (e) {
+                                    frappe.model.set_value(reviewer.doctype, reviewer.name, "email_sent", 1);
+
+                                }
                             },
-                            callback: function (e) {
-                                frappe.model.set_value(reviewer.doctype, reviewer.name, "email_sent", 1);
+                            )
 
-
-                            }
-                        },
-                        )
-
+                        }
                     }
                 });
 

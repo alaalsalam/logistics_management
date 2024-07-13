@@ -186,11 +186,15 @@ def review_email_notification(expense_claim,employee):
         frappe.throw("Employee does not have an email address.")
 
     email_subject = "New Expense Claim Assigned"
-    email_content = f"""<!DOCTYPE html>
+    email_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
     <html>
     <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            .email-container {{
+            .container {{
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
                 color: #333333;
@@ -222,7 +226,7 @@ def review_email_notification(expense_claim,employee):
         </style>
     </head>
     <body>
-        <div class="email-container">
+        <div class="container">
             <div class="header">
                 <h1>Expense Claim Assigned</h1>
             </div>
@@ -238,7 +242,8 @@ def review_email_notification(expense_claim,employee):
             </div>
         </div>
     </body>
-    </html>""", 
+    </html>
+    """
     
     # Send the email
     frappe.sendmail(
