@@ -173,3 +173,88 @@ def update_expiry_for_employee():
     except Exception as e:
         frappe.log_error(f"Error updating expiry for employee child table: {e}", "Update Expiry Cron Job")
 
+
+@frappe.whitelist()
+
+def review_email_notification(expense_claim,employee):
+
+    expense_claim_doc = frappe.get_doc('Expense Claim', expense_claim)
+    employee_doc = frappe.get_doc('Employee', employee)
+    email = employee_doc.company_email or employee_doc.personal_email
+
+    if not email:
+        frappe.throw("Employee does not have an email address.")
+
+    email_subject = "New Expense Claim Assigned"
+    email_content = f"""<!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            .email-container {{
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                color: #333333;
+            }}
+            .header {{
+                background-color: #004a99;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }}
+            .content {{
+                padding: 20px;
+            }}
+            .footer {{
+                background-color: #f1f1f1;
+                color: #777777;
+                padding: 10px;
+                text-align: center;
+            }}
+            .button {{
+                background-color: #004a99;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                border-radius: 5px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <h1>Expense Claim Assigned</h1>
+            </div>
+            <div class="content">
+                <p>Dear {employee_doc.employee_name},</p>
+                <p>You have been assigned a new expense claim.</p>
+                <p>Please review and take the necessary action:</p>
+                <a href="/app/expense-claim/{expense_claim}" class="button">View Expense Claim</a>
+            </div>
+            <div class="footer">
+                <p>Thank you,</p>
+                <p>KAAF Logistics</p>
+            </div>
+        </div>
+    </body>
+    </html>""", 
+    
+    # Send the email
+    frappe.sendmail(
+        recipients=email,
+        subject=email_subject,
+        message=email_content
+    )
+
+    # if comment:
+    #     # doc = frappe.get_doc('Expense Claim', expense_claim)
+    #     expense_claim_doc.add_comment('Comment', comment)
+    #     expense_claim_doc.save()
+    #     frappe.db.commit()
+
+        # print("done")
+    return "Email Sent"
+
+
+
