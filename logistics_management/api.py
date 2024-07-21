@@ -265,7 +265,7 @@ def review_email_notification(expense_claim,employee):
 def status_email_notification(expense_claim,employee,status):
     expense_claim_doc = frappe.get_doc('Expense Claim', expense_claim)
     employee_doc = frappe.get_doc('Employee', employee)
-    email = employee_doc.company_email or employee_doc.personal_email
+    email = "hr@kaaflogistics.com"
 
     email_subject = f"""Expense Claim {status} by {employee_doc.employee_name}"""
     email_content = f""" <!DOCTYPE html>
