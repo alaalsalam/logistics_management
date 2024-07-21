@@ -8,6 +8,7 @@
  "field_order": [
   "review_employee",
   "date",
+  "approval",
   "comment",
   "email_sent"
  ],
@@ -37,8 +38,7 @@
    "in_filter": 1,
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Comment",
-   "reqd": 1
+   "label": "Comment"
   },
   {
    "default": "0",
@@ -46,12 +46,22 @@
    "fieldtype": "Check",
    "label": "Email Sent",
    "read_only": 1
+  },
+  {
+   "fieldname": "approval",
+   "fieldtype": "Select",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Approval Status",
+   "options": "\nApproved\nRejected\nReview",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-07-13 04:32:37.178649",
+ "modified": "2024-07-21 17:16:03.883521",
  "modified_by": "Administrator",
  "module": "Logistics Management",
  "name": "Employee Reviewer",

@@ -2,10 +2,10 @@ import frappe
 from datetime import datetime
 
 def notify():
-    employee = frappe.db.get_list('Employee',fields=['name','personal_email'])
+    employee = frappe.db.get_list('Employee',fields=['name','personal_email','company_email','employee_name'])
 
     for i in employee:
-        email = i.personal_email
+        email = i.personal_email or i.company_email
         check_document_expiry(i.name,email)
 
 def check_document_expiry(employee,email):

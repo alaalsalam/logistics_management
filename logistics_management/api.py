@@ -261,5 +261,34 @@ def review_email_notification(expense_claim,employee):
         # print("done")
     return "Email Sent"
 
+@frappe.whitelist()
+def status_email_notification(expense_claim,employee,status):
+    expense_claim_doc = frappe.get_doc('Expense Claim', expense_claim)
+    employee_doc = frappe.get_doc('Employee', employee)
+    email = employee_doc.company_email or employee_doc.personal_email
 
+    email_subject = f"""Expense Claim {status} by {employee_doc.employee_name}"""
+    email_content = f""" <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <style>
+                .button {{
+                background-color: #004a99;
+                color: white;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                border-radius: 5px;
+            }}
+    </style>
+    <p>Expense Claim Has Been {status} by {employee_doc.employee_name}</p>
+     <a href="/app/expense-claim/{expense_claim}" class="button">View Expense Claim</a>
+    </head>
+    </html>"""
 
+    frappe.sendmail(
+        recipients=email,
+        subject=email_subject,
+        message=email_content
+    )

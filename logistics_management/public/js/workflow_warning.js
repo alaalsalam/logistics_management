@@ -67,3 +67,29 @@ frappe.ui.form.on('Expense Claim', {
     }
 
 });
+
+frappe.ui.form.on('Employee Reviewer', {
+    approval: function (frm, cdt, cdn) {
+        let row = locals[cdt][cdn]
+
+        console.log(row, "row")
+
+        if (row.approval) {
+
+            frappe.call({
+                method: "logistics_management.api.status_email_notification",
+                args: {
+                    expense_claim: frm.doc.name,
+                    employee: row.review_employee,
+                    status: row.approval
+                },
+                callback: function (r) {
+                    console.log("helo");
+                }
+            })
+        }
+
+
+    }
+
+})
