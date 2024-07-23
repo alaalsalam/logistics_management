@@ -266,7 +266,7 @@ def review_email_notification(doctype,docname,employee):
 def status_email_notification(doctype,docname,employee,status):
     expense_claim_doc = frappe.get_doc(doctype, docname)
     employee_doc = frappe.get_doc('Employee', employee)
-    email = employee_doc.company_email or employee_doc.personal_email
+    email = "hr@kaaflogistics.com"
 
     doctype_url = f"/app/expense-claim/{docname}" if doctype == "Expense Claim" else f"/app/employee-advance/{docname}"
 
