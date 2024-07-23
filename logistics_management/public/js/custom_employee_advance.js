@@ -1,4 +1,4 @@
-frappe.ui.form.on('Expense Claim', {
+frappe.ui.form.on('Employee Advance', {
     before_workflow_action: async function (frm) {
         let promise = new Promise((resolve, reject) => {
             frappe.dom.unfreeze()
@@ -26,8 +26,6 @@ frappe.ui.form.on('Expense Claim', {
             console.log(reviewer.comment)
 
             if (reviewer.email_sent == 0) {
-
-                console.log("hello")
 
                 frappe.call({
                     method: "logistics_management.api.review_email_notification",
@@ -69,30 +67,3 @@ frappe.ui.form.on('Expense Claim', {
     }
 
 });
-
-frappe.ui.form.on('Employee Reviewer', {
-    approval: function (frm, cdt, cdn) {
-        let row = locals[cdt][cdn]
-
-        console.log(row, "row")
-
-        if (row.approval) {
-
-            frappe.call({
-                method: "logistics_management.api.status_email_notification",
-                args: {
-                    doctype: frm.doc.doctype,
-                    docname: frm.doc.name,
-                    employee: row.review_employee,
-                    status: row.approval
-                },
-                callback: function (r) {
-                    console.log("helo");
-                }
-            })
-        }
-
-
-    }
-
-})

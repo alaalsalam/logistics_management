@@ -11,7 +11,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 app_include_css = "/assets/logistics_management/css/kaaf.css"
-app_include_js = ["/assets/logistics_management/js/employee_document.js","/assets/logistics_management/js/list_settings.js","/assets/logistics_management/js/workflow_warning.js"]
+app_include_js = ["/assets/logistics_management/js/employee_document.js","/assets/logistics_management/js/list_settings.js","/assets/logistics_management/js/workflow_warning.js","/assets/logistics_management/js/custom_employee_advance.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/logistics_management/css/logistics_management.css"

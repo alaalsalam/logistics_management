@@ -176,16 +176,17 @@ def update_expiry_for_employee():
 
 @frappe.whitelist()
 
-def review_email_notification(expense_claim,employee):
+def review_email_notification(doctype,docname,employee):
 
-    expense_claim_doc = frappe.get_doc('Expense Claim', expense_claim)
+    expense_claim_doc = frappe.get_doc(doctype, docname)
     employee_doc = frappe.get_doc('Employee', employee)
     email = employee_doc.company_email or employee_doc.personal_email
+    doctype_url = f"/app/expense-claim/{docname}" if doctype == "Expense Claim" else f"/app/employee-advance/{docname}"
 
     if not email:
         frappe.throw("Employee does not have an email address.")
 
-    email_subject = "New Expense Claim Assigned"
+    email_subject = f"New {doctype} Assigned"
     email_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -228,13 +229,13 @@ def review_email_notification(expense_claim,employee):
     <body>
         <div class="container">
             <div class="header">
-                <h1>Expense Claim Assigned</h1>
+                <h1>{doctype} Assigned</h1>
             </div>
             <div class="content">
                 <p>Dear {employee_doc.employee_name},</p>
-                <p>You have been assigned a new expense claim.</p>
+                <p>You have been assigned a new {doctype}.</p>
                 <p>Please review and take the necessary action:</p>
-                <a href="/app/expense-claim/{expense_claim}" class="button">View Expense Claim</a>
+                <a href="{doctype_url}" class="button">View {doctype}</a>
             </div>
             <div class="footer">
                 <p>Thank you,</p>
@@ -262,12 +263,14 @@ def review_email_notification(expense_claim,employee):
     return "Email Sent"
 
 @frappe.whitelist()
-def status_email_notification(expense_claim,employee,status):
-    expense_claim_doc = frappe.get_doc('Expense Claim', expense_claim)
+def status_email_notification(doctype,docname,employee,status):
+    expense_claim_doc = frappe.get_doc(doctype, docname)
     employee_doc = frappe.get_doc('Employee', employee)
-    email = "hr@kaaflogistics.com"
+    email = employee_doc.company_email or employee_doc.personal_email
 
-    email_subject = f"""Expense Claim {status} by {employee_doc.employee_name}"""
+    doctype_url = f"/app/expense-claim/{docname}" if doctype == "Expense Claim" else f"/app/employee-advance/{docname}"
+
+    email_subject = f"""{doctype} {status} by {employee_doc.employee_name}"""
     email_content = f""" <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -282,8 +285,8 @@ def status_email_notification(expense_claim,employee,status):
                 border-radius: 5px;
             }}
     </style>
-    <p>Expense Claim Has Been {status} by {employee_doc.employee_name}</p>
-     <a href="/app/expense-claim/{expense_claim}" class="button">View Expense Claim</a>
+    <p>{doctype} Has Been {status} by {employee_doc.employee_name}</p>
+     <a href="{doctype_url}" class="button">View {doctype}</a>
     </head>
     </html>"""
 
