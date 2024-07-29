@@ -6,9 +6,9 @@ def notify():
 
     for i in employee:
         email = i.personal_email or i.company_email
-        check_document_expiry(i.name,email)
+        check_document_expiry(i.name,email,i.employee_name)
 
-def check_document_expiry(employee,email):
+def check_document_expiry(employee,email,employee_name):
     
     documents = frappe.db.get_all(
         'Document Table',
@@ -25,13 +25,13 @@ def check_document_expiry(employee,email):
             one_month = frappe.utils.add_months(current_date, 1)
 
             if selected_date_obj == seven_days:
-                send_email_notification(employee,email,seven_days,days_left,document.document_type,document.attach_file)
+                send_email_notification(employee,email,seven_days,days_left,document.document_type,document.attach_file,employee_name)
             elif selected_date_obj == one_month:
-                send_email_notification(employee,email,one_month,days_left,document.document_type,document.attach_file)
+                send_email_notification(employee,email,one_month,days_left,document.document_type,document.attach_file, employee_name)
             elif selected_date_obj == current_date:
-                send_email_notification(employee,email,current_date,days_left,document.document_type,document.attach_file)
+                send_email_notification(employee,email,current_date,days_left,document.document_type,document.attach_file, employee_name)
             
-def send_email_notification(employee, email, days, days_left, document_type, attachment):
+def send_email_notification(employee, email, days, days_left, document_type, attachment, employee_name):
     recipients = [email, 'fadilsiddique@gmail.com']
     message_html = f"""
     <!DOCTYPE html>
@@ -78,7 +78,7 @@ def send_email_notification(employee, email, days, days_left, document_type, att
             <h2>{document_type} Expiry Reminder</h2>
         </div>
         <div class="content">
-            <p>Dear {employee},</p>
+            <p>Dear {employee_name},</p>
             <p>This is a friendly reminder that your document <strong>{document_type}</strong> is set to expire on <strong>{days_left} days</strong>. We recommend reviewing and renewing it as soon as possible to ensure continuous service.</p>
             <p>If you have any questions or require assistance, please do not hesitate to contact our support team.</p>
             <p>Thank you for your attention to this matter.</p>
