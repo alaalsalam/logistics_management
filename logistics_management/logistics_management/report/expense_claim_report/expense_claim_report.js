@@ -48,7 +48,8 @@ frappe.query_reports["Expense Claim Report"] = {
 			fieldname: "company",
 			label: __("Company"),
 			fieldtype: "Link",
-			options: "Company"
+			options: "Company",
+			reqd: 1
 		}
 
 	]
