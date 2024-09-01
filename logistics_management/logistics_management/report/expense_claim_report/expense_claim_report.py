@@ -19,6 +19,7 @@ def get_columns():
         {"label": "Total Amount Reimbursed", "fieldname": "total_amount_reimbursed", "fieldtype": "Float", "width": 180},
 		{"label": "Currency", "fieldname": "currency", "fieldtype": "Data", "width": 80},
         {"label": "Company", "fieldname": "company", "fieldtype": "Data", "width": 120},
+        {"label": "Employee Advance", "fieldname": "company", "fieldtype": "Data", "width": 120},
         
     ]
 
@@ -36,6 +37,7 @@ def get_data(filters):
             ec.total_claimed_amount,
             ec.total_amount_reimbursed,
             ec.company,
+            ec.project,
             c.default_currency AS currency
         FROM 
             `tabExpense Claim` ec
@@ -80,6 +82,9 @@ def get_conditions(filters):
     if filters.get("company"):
         conditions.append("AND ec.company = %(company)s")
         values["company"] = filters.get("company")
+    if filters.get("project"):
+        conditions.append("AND ec.project = %(project)s")
+        values["project"] = filters.get("project")
 
     return " ".join(conditions), values
 

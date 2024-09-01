@@ -1,4 +1,5 @@
 frappe.ui.form.on('Expense Claim', {
+
     before_workflow_action: async function (frm) {
         let promise = new Promise((resolve, reject) => {
             frappe.dom.unfreeze()
@@ -66,6 +67,34 @@ frappe.ui.form.on('Expense Claim', {
 
 
         })
+    },
+    after_workflow_action: function (frm) {
+        let approval_status = frm.doc.approval_status
+        let reason = frm.doc.custom_reason
+
+        console.log(approval_status, "BS")
+
+        if (approval_status === "Rejected") {
+            console.log(approval_status)
+            if (reason) {
+                console.log(reason)
+
+                frappe.call({
+                    method: "logistics_management.api.rejection_email",
+                    args: {
+                        doctype: frm.doc.doctype,
+                        docname: frm.doc.name,
+                        status: approval_status,
+                        employee: frm.doc.employee,
+                        reason: reason
+                    },
+                    callback: function (r) {
+                        console.log("helo");
+                    }
+                })
+
+            }
+        }
     }
 
 });

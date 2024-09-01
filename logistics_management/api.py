@@ -295,3 +295,21 @@ def status_email_notification(doctype,docname,employee,status):
         subject=email_subject,
         message=email_content
     )
+@frappe.whitelist()
+def rejection_email(doctype, docname,status, employee,reason):
+    doctype_url = f"/app/expense-claim/{docname}" if doctype == "Expense Claim" else f"/app/employee-advance/{docname}"
+    employee_doc = frappe.get_doc('Employee', employee)
+    email = employee_doc.company_email or employee_doc.personal_email
+    email_subject = f"""Rejection Notification"""
+    email_content = f"""<html>
+    <head>
+    <p>{doctype} Has Been {status} , Reason: {reason}</p>
+     <a href="{doctype_url}" class="button">View {doctype}</a>
+    </head>
+    </html>"""
+
+    frappe.sendmail(
+        recipients=email,
+        subject=email_subject,
+        message=email_content
+    )
