@@ -313,3 +313,40 @@ def rejection_email(doctype, docname,status, employee,reason):
         subject=email_subject,
         message=email_content
     )
+
+
+import frappe
+from frappe import _
+
+@frappe.whitelist()
+def fetch_missing_employee_data(doctype):
+    """
+    Enqueue the background job to fetch missing employee data.
+    """
+    frappe.enqueue('logistics_management.api.process_missing_employee_data', queue='long', doctype=doctype)
+    return _("Fetch missing employee data job has been enqueued.")
+
+def process_missing_employee_data(doctype):
+    """
+    This method processes records with missing branch or company fields.
+    """
+    # Get all Employee Checkin records with missing branch or company
+    checkins = frappe.get_all(doctype, filters=[['custom_branch', 'is', 'not set'], ['custom_company', 'is', 'not set']])
+    
+    for checkin in checkins:
+        employee_checkin = frappe.get_doc(doctype, checkin.name)
+        
+        # Fetch employee details
+        employee = frappe.get_doc('Employee', employee_checkin.employee)
+        
+        # Update branch and company if missing
+        if not employee_checkin.custom_branch and employee.branch:
+            employee_checkin.custom_branch = employee.branch
+        
+        if not employee_checkin.custom_company and employee.company:
+            employee_checkin.custom_company = employee.company
+        
+        # Save the updated document
+        employee_checkin.save()
+        
+    frappe.db.commit()
