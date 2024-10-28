@@ -84,7 +84,7 @@ def process_checkin(Logdata):
         employee_code = item['EmployeeCode']
         timestamp_str = item['LogDate']
         device_id = item['SerialNumber']
-        # log_type = item['PunchDirection']
+        log_type = item['PunchDirection']
         timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
 
         employee = frappe.db.get_value('Employee', {'attendance_device_id': employee_code}, 'name')
@@ -105,7 +105,7 @@ def process_checkin(Logdata):
             check_in.employee = employee
             check_in.time = timestamp
             check_in.device_id = device_id
-            # check_in.log_type = log_type
+            check_in.log_type = log_type if log_type else "" 
             check_in.insert()
 
         if index == len(Logdata)-1:
